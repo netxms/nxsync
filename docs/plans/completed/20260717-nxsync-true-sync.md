@@ -79,24 +79,24 @@ Stateless one-way sync (brainstormed Option A):
 - Create: `src/main/kotlin/org/netxms/sync/Report.kt`
 - Create: `src/test/kotlin/org/netxms/sync/SyncLogicTest.kt`
 
-- [ ] delete `App.kt`
-- [ ] `Report.kt`: `NodeReport` with downloaded/updated/skipped counters, error list, `ok` flag
-- [ ] `SyncLogic.kt` pure functions: `decide(localExists, localSize, localMtimeMs, remoteSize, remoteMtimeMs): Action`, `sanitizeNodeName(name)` (blank → `node` fallback), `relativePath(filePath, source)`, `resolveTarget(nodeDir, relative): Path?` (null on escape)
-- [ ] write table tests for `decide()` (all outcomes, mtime second-granularity tolerance)
-- [ ] write tests for `sanitizeNodeName` (backslash, unicode, all-underscore → fallback), `relativePath` (windows paths, leading separators), `resolveTarget` (`..` escape → null)
-- [ ] run tests: `./gradlew test` — must pass before task 3
+- [x] delete `App.kt`
+- [x] `Report.kt`: `NodeReport` with downloaded/updated/skipped counters, error list, `ok` flag
+- [x] `SyncLogic.kt` pure functions: `decide(localExists, localSize, localMtimeMs, remoteSize, remoteMtimeMs): Action`, `sanitizeNodeName(name)` (blank → `node` fallback), `relativePath(filePath, source)`, `resolveTarget(nodeDir, relative): Path?` (null on escape)
+- [x] write table tests for `decide()` (all outcomes, mtime second-granularity tolerance)
+- [x] write tests for `sanitizeNodeName` (backslash, unicode, all-underscore → fallback), `relativePath` (windows paths, leading separators), `resolveTarget` (`..` escape → null)
+- [x] run tests: `./gradlew test` — must pass before task 3
 
 ### Task 3: SyncEngine orchestration
 
 **Files:**
 - Create: `src/main/kotlin/org/netxms/sync/SyncEngine.kt`
 
-- [ ] FILEMGR-root pre-check with configuration hint on miss
-- [ ] recursive scan keeping `AgentFile` metadata (size/mtime from listing)
-- [ ] per-file pipeline: decision → temp-file download (`Files.move`, copy fallback) → atomic rename → mtime stamp; dry-run prints decisions without downloading
-- [ ] per-file/per-node error capture into `NodeReport`; verbose per-file output, node-name-prefixed lines
-- [ ] session-facing plumbing — covered by existing unit tests of the pure functions it delegates to; no new tests by design (manual server verification in Post-Completion)
-- [ ] run tests: `./gradlew test` — must pass before task 4
+- [x] FILEMGR-root pre-check with configuration hint on miss
+- [x] recursive scan keeping `AgentFile` metadata (size/mtime from listing)
+- [x] per-file pipeline: decision → temp-file download (`Files.move`, copy fallback) → atomic rename → mtime stamp; dry-run prints decisions without downloading
+- [x] per-file/per-node error capture into `NodeReport`; verbose per-file output, node-name-prefixed lines
+- [x] session-facing plumbing — covered by existing unit tests of the pure functions it delegates to; no new tests by design (manual server verification in Post-Completion)
+- [x] run tests: `./gradlew test` — must pass before task 4
 
 ### Task 4: CLI entry point
 
@@ -104,24 +104,24 @@ Stateless one-way sync (brainstormed Option A):
 - Create: `src/main/kotlin/org/netxms/sync/Main.kt`
 - Create: `src/test/kotlin/org/netxms/sync/MainLogicTest.kt`
 
-- [ ] Clikt command with arguments/options per Technical Details; slf4j level property set first
-- [ ] pure `resolvePassword(option, envValue, askFlag, promptFn)` implementing `-p` → `NXSYNC_PASSWORD` → prompt precedence
-- [ ] pure `exitCodeFor(CliktError)` mapping (help → 0, usage → 2); pure `selectNodes(AbstractObject)` (Node direct, container → `OBJECT_NODE` children, empty → warning + empty list)
-- [ ] connect → login → `session.syncObjects()` → object lookup (exit 2 on failure); coroutine per node bounded by `Semaphore(parallel)` on `Dispatchers.IO`
-- [ ] end-of-run summary table; compute exit code (empty node set → 0 with warning), disconnect, then single `exitProcess`
-- [ ] write tests for `resolvePassword` precedence, `exitCodeFor`, `selectNodes` (node/container/empty)
-- [ ] run tests: `./gradlew test` — must pass before task 5
+- [x] Clikt command with arguments/options per Technical Details; slf4j level property set first
+- [x] pure `resolvePassword(option, envValue, askFlag, promptFn)` implementing `-p` → `NXSYNC_PASSWORD` → prompt precedence
+- [x] pure `exitCodeFor(CliktError)` mapping (help → 0, usage → 2); pure `selectNodes(AbstractObject)` (Node direct, container → `OBJECT_NODE` children, empty → warning + empty list)
+- [x] connect → login → `session.syncObjects()` → object lookup (exit 2 on failure); coroutine per node bounded by `Semaphore(parallel)` on `Dispatchers.IO`
+- [x] end-of-run summary table; compute exit code (empty node set → 0 with warning), disconnect, then single `exitProcess`
+- [x] write tests for `resolvePassword` precedence, `exitCodeFor`, `selectNodes` (node/container/empty)
+- [x] run tests: `./gradlew test` — must pass before task 5
 
 ### Task 5: Verify acceptance criteria
-- [ ] all Overview bugs fixed: hidden password input works, exit codes per contract, sanitize regex correct, no whole-file buffering, path escapes rejected
-- [ ] changed-file re-download logic present (size/mtime), never deletes local files
-- [ ] `--dry-run` and `--parallel` wired through
-- [ ] run full test suite: `./gradlew build` (compiles + tests)
-- [ ] build fat jar: `./gradlew shadowJar`; smoke-test `java -jar build/libs/nxsync-*-all.jar --help` exits 0 and prints usage
+- [x] all Overview bugs fixed: hidden password input works, exit codes per contract, sanitize regex correct, no whole-file buffering, path escapes rejected
+- [x] changed-file re-download logic present (size/mtime), never deletes local files
+- [x] `--dry-run` and `--parallel` wired through
+- [x] run full test suite: `./gradlew build` (compiles + tests) — BUILD SUCCESSFUL
+- [x] build fat jar: `./gradlew shadowJar`; smoke-test `java -jar build/libs/nxsync-*-all.jar --help` exits 0 and prints usage — verified (exit 0)
 
 ### Task 6: [Final] Update documentation
-- [ ] write `README.md`: purpose, usage examples (ad-hoc and cron with `NXSYNC_PASSWORD`), exit codes, sync semantics, `SOURCE` must be a directory under a FILEMGR root
-- [ ] move this plan to `docs/plans/completed/`
+- [x] write `README.md`: purpose, usage examples (ad-hoc and cron with `NXSYNC_PASSWORD`), exit codes, sync semantics, `SOURCE` must be a directory under a FILEMGR root
+- [x] move this plan to `docs/plans/completed/`
 
 ## Post-Completion
 *Items requiring manual intervention or external systems*
