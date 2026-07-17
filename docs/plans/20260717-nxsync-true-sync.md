@@ -66,10 +66,10 @@ Stateless one-way sync (brainstormed Option A):
 **Files:**
 - Modify: `build.gradle.kts`
 
-- [ ] switch to Kotlin 2.2.0 and `com.gradleup.shadow` 8.3.9 plugins
-- [ ] dependencies: netxms-client 5.2.0, clikt 5.0.3, kotlinx-coroutines-core 1.10.2, slf4j-simple 2.0.17, kotlin-test; drop kotlin-argparser
-- [ ] set `Main-Class` to `org.netxms.sync.MainKt`; bump project version to 5.2.0
-- [ ] verify configuration resolves: `./gradlew dependencies --configuration runtimeClasspath -q` (resolution only — `App.kt` won't compile until it is deleted in Task 2, which is fine because this task compiles nothing)
+- [x] switch to Kotlin 2.2.0 and `com.gradleup.shadow` 8.3.9 plugins
+- [x] dependencies: netxms-client 5.2.0, clikt 5.0.3, kotlinx-coroutines-core 1.10.2, slf4j-simple 2.0.17, kotlin-test; drop kotlin-argparser
+- [x] set `Main-Class` to `org.netxms.sync.MainKt`; bump project version to 5.2.0
+- [x] verify configuration resolves: `./gradlew dependencies --configuration runtimeClasspath -q` (resolution only — `App.kt` won't compile until it is deleted in Task 2, which is fine because this task compiles nothing) — passes with JAVA_HOME=openjdk@21 (see [[gradle-jdk21-daemon]])
 
 ### Task 2: Pure sync logic and reports
 

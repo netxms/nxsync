@@ -1,21 +1,20 @@
 plugins {
-    kotlin("jvm") version "1.9.22"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    kotlin("jvm") version "2.2.0"
+    id("com.gradleup.shadow") version "8.3.9"
 }
 
 group = "org.netxms"
-version = "5.1"
+version = "5.2.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.netxms:netxms-client:5.1.5")
-    implementation("com.xenomachina:kotlin-argparser:2.0.7")
-    implementation("org.slf4j:slf4j-simple:2.0.12")
-//    implementation("ch.qos.logback:logback-classic:1.4.14")
-//    implementation("io.github.oshai:kotlin-logging-jvm:6.0.3")
+    implementation("org.netxms:netxms-client:5.2.0")
+    implementation("com.github.ajalt.clikt:clikt:5.0.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.slf4j:slf4j-simple:2.0.17")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
@@ -30,6 +29,6 @@ kotlin {
 
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "org.netxms.sync.AppKt"
+        attributes["Main-Class"] = "org.netxms.sync.MainKt"
     }
 }
