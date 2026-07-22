@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.2.0"
-    id("com.gradleup.shadow") version "8.3.9"
+    kotlin("jvm") version "2.4.10"
+    id("com.gradleup.shadow") version "9.6.0"
 }
 
 val netxmsVersion = "6.2.1"
@@ -32,5 +32,11 @@ kotlin {
 tasks.jar {
     manifest {
         attributes["Main-Class"] = "org.netxms.sync.MainKt"
+    }
+}
+
+tasks.shadowJar {
+    filesMatching("META-INF/*.kotlin_module") {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
