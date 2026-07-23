@@ -3,7 +3,7 @@ plugins {
     id("com.gradleup.shadow") version "9.6.0"
 }
 
-val netxmsVersion = "6.2.1"
+val netxmsVersion = "5.1.5"
 
 group = "org.netxms"
 version = netxmsVersion
