@@ -9,6 +9,7 @@ import com.github.ajalt.clikt.core.PrintMessage
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.parse
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.arguments.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -61,7 +62,8 @@ class SyncCommand : CliktCommand(name = "nxsync") {
         "One-way sync of agent files from NetXMS nodes into a local directory. " +
             "SOURCE must be a directory on the agent under a FILEMGR root. Local files are never deleted."
 
-    private val server by argument(help = "NetXMS server address")
+    private val server by argument(help = "NetXMS server address: host[:port] or [ipv6]:port (default port $DEFAULT_SERVER_PORT)")
+        .convert { parseServerAddress(it) ?: fail("invalid server address '$it'") }
     private val source by argument(help = "Source directory on the agent (under a FILEMGR root)")
     private val destination by argument(help = "Local destination directory")
 
@@ -78,7 +80,7 @@ class SyncCommand : CliktCommand(name = "nxsync") {
 
     override fun run() {
         System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", if (verbose) "info" else "warn")
-        val session = NXCSession(server)
+        val session = NXCSession(server.host, server.port)
         exitCode = try {
             runSync(session)
         } finally {

@@ -12,7 +12,7 @@ repeated runs are cheap and safe to schedule.
 ## Requirements
 
 - Java 17 or newer.
-- A NetXMS server (6.2.x) with credentials that can read the target objects.
+- A NetXMS server (7.0.x) with credentials that can read the target objects.
 - On each node, the agent's **FILEMGR** subagent must be configured with a root
   that contains `SOURCE` (see [Source directory](#source-directory)).
 
@@ -22,7 +22,7 @@ repeated runs are cheap and safe to schedule.
 ./gradlew shadowJar
 ```
 
-This produces a self-contained jar at `build/libs/nxsync-6.2.1-all.jar`.
+This produces a self-contained jar at `build/libs/nxsync-7.0.4-all.jar`.
 
 ## Usage
 
@@ -32,7 +32,7 @@ nxsync [OPTIONS] SERVER SOURCE DESTINATION
 
 | Argument      | Description                                                        |
 |---------------|-------------------------------------------------------------------|
-| `SERVER`      | NetXMS server address.                                            |
+| `SERVER`      | NetXMS server address: `host[:port]`, default port `4701`. Bracket IPv6 addresses when giving a port: `[::1]:4701`. |
 | `SOURCE`      | Directory on the agent, under a FILEMGR root, to sync from.       |
 | `DESTINATION` | Local directory to sync into.                                    |
 
@@ -60,22 +60,22 @@ The password is resolved in this order:
 Ad-hoc sync of `/opt/reports` from a single node (object id `1234`) into `./out`:
 
 ```sh
-java -jar nxsync-6.2.1-all.jar -o 1234 -p secret \
+java -jar nxsync-7.0.4-all.jar -o 1234 -p secret \
   netxms.example.com /opt/reports ./out
 ```
 
 Preview what a container-wide sync would do, without downloading:
 
 ```sh
-java -jar nxsync-6.2.1-all.jar -o 42 --dry-run -v \
-  netxms.example.com /opt/reports ./out
+java -jar nxsync-7.0.4-all.jar -o 42 --dry-run -v \
+  netxms.example.com:54701 /opt/reports ./out
 ```
 
 Cron entry syncing every node under container `42`, password from the
 environment, 8 nodes at a time:
 
 ```cron
-0 * * * * NXSYNC_PASSWORD='secret' java -jar /opt/nxsync/nxsync-6.2.1-all.jar \
+0 * * * * NXSYNC_PASSWORD='secret' java -jar /opt/nxsync/nxsync-7.0.4-all.jar \
   -o 42 -u sync --parallel 8 netxms.example.com /opt/reports /srv/nxsync 2>>/var/log/nxsync.err
 ```
 

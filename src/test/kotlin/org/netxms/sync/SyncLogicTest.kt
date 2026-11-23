@@ -91,4 +91,44 @@ class SyncLogicTest {
         assertTrue(isUnderRoot("C:\\data\\x", "C:\\data"))
         assertFalse(isUnderRoot("/opt/data", "/opt/data/sub"))
     }
+
+    @Test
+    fun parseServerAddressTable() {
+        val cases = listOf(
+            "host" to ServerAddress("host", DEFAULT_SERVER_PORT),
+            "proxy.example.com:54701" to ServerAddress("proxy.example.com", 54701),
+            "10.0.0.1:4701" to ServerAddress("10.0.0.1", 4701),
+            "[::1]:54701" to ServerAddress("::1", 54701),
+            "[::1]" to ServerAddress("::1", DEFAULT_SERVER_PORT),
+            "::1" to ServerAddress("::1", DEFAULT_SERVER_PORT),
+            "fe80::1" to ServerAddress("fe80::1", DEFAULT_SERVER_PORT),
+            "fe80::1%en0" to ServerAddress("fe80::1%en0", DEFAULT_SERVER_PORT),
+            "::" to ServerAddress("::", DEFAULT_SERVER_PORT),
+            "::ffff:10.0.0.1" to ServerAddress("::ffff:10.0.0.1", DEFAULT_SERVER_PORT),
+            "2001:db8:0:0:0:0:0:1" to ServerAddress("2001:db8:0:0:0:0:0:1", DEFAULT_SERVER_PORT),
+            "host:65535" to ServerAddress("host", 65535),
+            "host:" to null,
+            "host:abc" to null,
+            "host:0" to null,
+            "host:70000" to null,
+            ":4701" to null,
+            "" to null,
+            "[::1" to null,
+            "[]:1" to null,
+            "[::1]x" to null,
+            "[::1]:" to null,
+            "host:4701:" to null,
+            "host::4701" to null,
+            "host:4701:80" to null,
+            "10.0.0.1:4701:" to null,
+            "1:4701:" to null,
+            ":1:2" to null,
+            ":::1" to null,
+            "1::2::3" to null,
+            "fe80::1%" to null,
+        )
+        for ((input, expected) in cases) {
+            assertEquals(expected, parseServerAddress(input), input)
+        }
+    }
 }
